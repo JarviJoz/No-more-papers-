@@ -1,0 +1,102 @@
+<Window x:Class="NoMorePapers.Views.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Acerca de No More Papers" Width="600" Height="690" MinWidth="480" MinHeight="520"
+        WindowStartupLocation="CenterOwner" WindowStyle="None" AllowsTransparency="True"
+        Background="Transparent" ResizeMode="CanResizeWithGrip" ShowInTaskbar="False"
+        Loaded="Window_Loaded" PreviewKeyDown="Window_PreviewKeyDown" Closing="Window_Closing">
+    <Border Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="18" Padding="25">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="28" ShadowDepth="5" Opacity="0.22" Color="#18294A" />
+        </Border.Effect>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Margin="0,0,0,14">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Border Width="54" Height="54" CornerRadius="16" Background="{DynamicResource PrimaryBrush}">
+                    <materialDesign:PackIcon Kind="FolderMultipleOutline" Width="30" Height="30" Foreground="{DynamicResource PrimaryForegroundBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <StackPanel Grid.Column="1" Margin="14,0,0,0" VerticalAlignment="Center">
+                    <TextBlock Text="Acerca de No More Papers" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                    <TextBlock Text="Información de la aplicación y contacto" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" />
+                </StackPanel>
+                <Button Grid.Column="2" Width="38" Height="38" Style="{StaticResource MaterialDesignIconButton}" ToolTip="Cerrar" AutomationProperties.Name="Cerrar información" Click="Close_Click">
+                    <materialDesign:PackIcon Kind="Close" />
+                </Button>
+            </Grid>
+
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel>
+                    <Border CornerRadius="15" Background="{DynamicResource SidebarBrush}" Padding="22" Margin="0,0,0,14">
+                        <StackPanel HorizontalAlignment="Center">
+                            <TextBlock Text="NO MORE PAPERS" FontSize="24" FontWeight="ExtraBold" Foreground="White" HorizontalAlignment="Center" />
+                            <TextBlock Text="Menos papeles, más tiempo para lo importante." FontSize="12" Foreground="#C7D4F3" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Margin="0,5,0,0" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource AppCardStyle}" Padding="18" Margin="0,0,0,14">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Margin="0,0,10,0">
+                                <TextBlock Text="CREADO POR" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource TextSecondaryBrush}" />
+                                <TextBlock Text="Javier Augusto Cubillos Niño" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" Margin="0,4,0,12" />
+                                <TextBlock Text="VERSIÓN" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource TextSecondaryBrush}" />
+                                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                    <materialDesign:PackIcon Kind="TagOutline" Width="17" Height="17" Foreground="{DynamicResource PrimaryBrush}" Margin="0,0,6,0" />
+                                    <TextBlock Text="Release 2.0" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" />
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                                <TextBlock Text="UNIVERSIDAD" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource TextSecondaryBrush}" />
+                                <StackPanel Orientation="Horizontal" Margin="0,4,0,12">
+                                    <materialDesign:PackIcon Kind="SchoolOutline" Width="17" Height="17" Foreground="{DynamicResource PrimaryBrush}" Margin="0,0,6,0" />
+                                    <TextBlock Text="Universidad Cooperativa de Colombia" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <TextBlock Text="AÑO" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource TextSecondaryBrush}" />
+                                <TextBlock Text="2026" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,4,0,0" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Border Background="#FFF8E8" BorderBrush="#F2E2B8" BorderThickness="1" CornerRadius="12" Padding="13" Margin="0,0,0,14">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="OpenSourceInitiative" Width="20" Height="20" Foreground="#A76B00" Margin="0,0,9,0" />
+                            <TextBlock Text="Código abierto — prohibida la venta" Foreground="#755000" FontWeight="SemiBold" TextWrapping="Wrap" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource AppCardStyle}" Padding="16" Margin="0,0,0,4">
+                        <StackPanel>
+                            <TextBlock Text="CONTACTO" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,10" />
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                <materialDesign:PackIcon Kind="EmailOutline" Width="18" Height="18" Foreground="{DynamicResource PrimaryBrush}" Margin="0,0,9,0" />
+                                <TextBlock Text="javieraugusto90@hotmail.com" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="PhoneOutline" Width="18" Height="18" Foreground="{DynamicResource PrimaryBrush}" Margin="0,0,9,0" />
+                                <TextBlock Text="3016960204" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
+                <Button Content="Contactar" Style="{StaticResource SecondaryActionButton}" Margin="0,0,8,0" Click="Contact_Click" />
+                <Button Content="Cerrar" Style="{StaticResource PrimaryActionButton}" Click="Close_Click" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

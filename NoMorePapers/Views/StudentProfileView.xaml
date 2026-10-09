@@ -1,0 +1,269 @@
+<UserControl x:Class="NoMorePapers.Views.StudentProfileView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="#F0E6FF"
+             FontFamily="Segoe UI">
+    <Grid Margin="28">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,18">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <Button Command="{Binding BackToStudentsCommand}" Style="{StaticResource MaterialDesignIconButton}" ToolTip="Volver a estudiantes" Margin="0,0,12,0">
+                    <materialDesign:PackIcon Kind="ArrowLeft" Width="26" Height="26" />
+                </Button>
+                <materialDesign:PackIcon Kind="AccountCircle" Width="42" Height="42" Foreground="#24133F" />
+                <StackPanel Margin="12,0,0,0">
+                    <TextBlock Text="PERFIL DEL ESTUDIANTE" FontSize="12" Foreground="#6C5689" />
+                    <TextBlock Text="{Binding Student.Name}" FontSize="26" FontWeight="ExtraBold" Foreground="#24133F" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <Button Command="{Binding EditProfileCommand}"
+                        Style="{StaticResource MaterialDesignOutlinedButton}" Content="EDITAR PERFIL" Margin="0,0,10,0" />
+                <Button Command="{Binding CreateCaseCommand}" Style="{StaticResource PrimaryActionButton}" Content="CREAR CASO" MinWidth="140" />
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Background="#FBF9FF" CornerRadius="14" Padding="20">
+                <StackPanel>
+                    <TextBlock Text="INFORMACIÓN ACTUAL" FontWeight="Bold" Foreground="#6C5689" Margin="0,0,0,14" />
+                    <TextBlock Text="NOMBRE" FontSize="11" Foreground="#6C5689" />
+                    <TextBlock Text="{Binding Student.Name}" FontSize="18" FontWeight="SemiBold" Foreground="#24133F" Margin="0,0,0,12" />
+                    <TextBlock Text="EDAD ACTUAL" FontSize="11" Foreground="#6C5689" />
+                    <TextBlock Text="{Binding CurrentAge, StringFormat={}{0} años}" FontSize="16" Foreground="#24133F" Margin="0,0,0,12" />
+                    <TextBlock Text="GRADO" FontSize="11" Foreground="#6C5689" />
+                    <TextBlock Text="{Binding Student.Grade}" FontSize="16" Foreground="#24133F" Margin="0,0,0,12" />
+                    <TextBlock Text="ACUDIENTE" FontSize="11" Foreground="#6C5689" />
+                    <TextBlock Text="{Binding Student.Guardian1Name}" FontSize="15" Foreground="#24133F" />
+                    <TextBlock Text="{Binding Student.Guardian1Phone}" Foreground="#6C5689" Margin="0,0,0,12" />
+                    <TextBlock Text="ESTADO" FontSize="11" Foreground="#6C5689" />
+                    <TextBlock Text="{Binding Student.Status}" FontSize="15" Foreground="#24133F" Margin="0,0,0,20" />
+                    <TextBlock Text="CASOS HISTÓRICOS" FontWeight="Bold" Foreground="#6C5689" Margin="0,0,0,8" />
+                    <ListBox ItemsSource="{Binding Cases}" SelectedItem="{Binding SelectedCase}" BorderThickness="0" Background="Transparent" MouseDoubleClick="CasesListBox_MouseDoubleClick">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="8" Margin="0,2" Background="#E9DDF8" CornerRadius="6">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Id}" FontWeight="SemiBold" Foreground="#24133F" />
+                                        <TextBlock Text="{Binding CreatedAt, StringFormat=dd/MM/yyyy}" Foreground="#6C5689" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="2" Background="#FBF9FF" CornerRadius="14" Padding="24">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Text="DATOS DEL ESTUDIANTE" FontSize="20" FontWeight="Bold" Foreground="#24133F" Margin="0,0,0,18" />
+                        <Grid IsEnabled="{Binding IsEditing}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,12,12">
+                                <TextBlock Text="NOMBRE" Foreground="#6C5689" />
+                                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="12,0,0,12">
+                                <TextBlock Text="FECHA DE NACIMIENTO" Foreground="#6C5689" />
+                                <DatePicker SelectedDate="{Binding BirthDate, Mode=TwoWay}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,0,12,12">
+                                <TextBlock Text="GRADO" Foreground="#6C5689" />
+                                <TextBox Text="{Binding Grade, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="1" Margin="12,0,0,12">
+                                <TextBlock Text="GRUPO" Foreground="#6C5689" />
+                                <TextBox Text="{Binding Group, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="0" Grid.Row="2" Margin="0,0,12,12">
+                                <TextBlock Text="ACUDIENTE 1" Foreground="#6C5689" />
+                                <TextBox Text="{Binding Guardian1Name, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="2" Margin="12,0,0,12">
+                                <TextBlock Text="TELÉFONO" Foreground="#6C5689" />
+                                <TextBox Text="{Binding Guardian1Phone, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="0" Grid.Row="3" Margin="0,0,12,12">
+                                <TextBlock Text="ACUDIENTE 2" Foreground="#6C5689" />
+                                <TextBox Text="{Binding Guardian2Name, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="3" Margin="12,0,0,12">
+                                <TextBlock Text="ESTADO" Foreground="#6C5689" />
+                                <ComboBox ItemsSource="{Binding StatusOptions}" SelectedItem="{Binding Status}" />
+                            </StackPanel>
+                        </Grid>
+                        <Grid Margin="0,8,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="HERMANO (S)" FontSize="16" FontWeight="Bold" Foreground="#24133F" VerticalAlignment="Center" />
+                            <Button Grid.Column="1" Command="{Binding AddSiblingSearchCommand}"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}" ToolTip="Agregar hermano"
+                                    MinWidth="40" Padding="8,4">
+                                <materialDesign:PackIcon Kind="Plus" Width="18" Height="18" Foreground="#6C5689" />
+                            </Button>
+                        </Grid>
+                        <ItemsControl ItemsSource="{Binding Siblings}" Margin="0,8,0,0">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="8" Margin="0,3" Background="#E9DDF8" CornerRadius="6">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="#24133F" />
+                                                <TextBlock Foreground="#6C5689">
+                                                    <Run Text="Grado " />
+                                                    <Run Text="{Binding Grade}" />
+                                                    <Run Text=" — Grupo " />
+                                                    <Run Text="{Binding Group}" />
+                                                    <Run Text=" — Estado: " />
+                                                    <Run Text="{Binding Status}" />
+                                                </TextBlock>
+                                            </StackPanel>
+                                            <Button Grid.Column="1"
+                                                    Command="{Binding DataContext.RemoveSiblingCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                    CommandParameter="{Binding}" Style="{StaticResource MaterialDesignIconButton}"
+                                                    ToolTip="Eliminar relación" VerticalAlignment="Center">
+                                                <materialDesign:PackIcon Kind="Close" Width="18" Height="18" Foreground="#6C5689" />
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <ItemsControl ItemsSource="{Binding SiblingSearches}" Margin="0,4,0,0">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,4,0,8">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                                     materialDesign:HintAssist.Hint="Escribir nombre del hermano..."
+                                                     Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+                                            <Button Grid.Column="1" Margin="8,0,0,0"
+                                                    Command="{Binding DataContext.AddSiblingCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                    CommandParameter="{Binding}" IsEnabled="{Binding HasSelectedStudent}"
+                                                    Style="{StaticResource MaterialDesignOutlinedButton}" Content="VINCULAR" />
+                                        </Grid>
+                                        <TextBlock Text="Se encontraron posibles coincidencias; seleccione el estudiante correcto."
+                                                   Foreground="#6C5689" FontWeight="SemiBold" Margin="0,8,0,4">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding HasMatches}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        <ListBox ItemsSource="{Binding Suggestions}" SelectedItem="{Binding SelectedStudent, Mode=TwoWay}"
+                                                 MaxHeight="150" BorderThickness="0" Background="Transparent"
+                                                 ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Padding="8" Margin="0,2" Background="#FBF9FF" CornerRadius="6">
+                                                        <StackPanel>
+                                                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="#24133F" />
+                                                            <TextBlock Foreground="#6C5689">
+                                                                <Run Text="Grado " />
+                                                                <Run Text="{Binding Grade}" />
+                                                                <Run Text=" — Grupo " />
+                                                                <Run Text="{Binding Group}" />
+                                                                <Run Text=" — Estado: " />
+                                                                <Run Text="{Binding Status}" />
+                                                            </TextBlock>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Grid Margin="0,12,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="DOCUMENTOS DEL ESTUDIANTE" FontSize="16" FontWeight="Bold" Foreground="#24133F" VerticalAlignment="Center" />
+                            <Button Grid.Column="1" Command="{Binding LoadStudentDocumentsCommand}"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}" Padding="12,6">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="FolderOpen" Width="18" Height="18" Foreground="#6C5689" Margin="0,0,6,0" />
+                                    <TextBlock Text="CARGAR DOCUMENTOS" Foreground="#6C5689" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                        <ListBox ItemsSource="{Binding StudentDocuments}" MaxHeight="260" BorderThickness="0" Background="Transparent"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="0">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="8" Margin="0,3" Background="#E9DDF8" CornerRadius="6">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding FileName}" ToolTip="{Binding FileName}"
+                                                       TextTrimming="CharacterEllipsis" VerticalAlignment="Center"
+                                                       FontWeight="SemiBold" Foreground="#24133F" />
+                                            <Button Grid.Column="1"
+                                                    Command="{Binding DataContext.PreviewStudentDocumentCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                    CommandParameter="{Binding}" Style="{StaticResource MaterialDesignIconButton}"
+                                                    ToolTip="Previsualizar documento" VerticalAlignment="Center">
+                                                <materialDesign:PackIcon Kind="Eye" Width="18" Height="18" Foreground="#6C5689" />
+                                            </Button>
+                                            <Button Grid.Column="2"
+                                                    Command="{Binding DataContext.RemoveStudentDocumentCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                    CommandParameter="{Binding}" Style="{StaticResource MaterialDesignIconButton}"
+                                                    ToolTip="Eliminar documento" VerticalAlignment="Center">
+                                                <materialDesign:PackIcon Kind="Delete" Width="18" Height="18" Foreground="#6C5689" />
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Button Command="{Binding SaveProfileCommand}" IsEnabled="{Binding IsEditing}" Content="GUARDAR" HorizontalAlignment="Right" Style="{StaticResource PrimaryActionButton}" MinWidth="120" Margin="0,12,0,0" />
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

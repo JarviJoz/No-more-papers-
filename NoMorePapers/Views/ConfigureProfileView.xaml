@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="NoMorePapers.Views.ConfigureProfileView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="{StaticResource AppBackgroundBrush}">
+
+    <Grid>
+        <Border Style="{StaticResource AppCardStyle}" Width="520" MaxHeight="640" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="44">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel>
+                <materialDesign:PackIcon Kind="AccountHardHat" Width="60" Height="60" HorizontalAlignment="Center" Foreground="{StaticResource SecondaryBrush}" Margin="0,0,0,10"/>
+
+                <TextBlock Text="NUEVO PROFESIONAL" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,5"/>
+                <TextBlock Text="{Binding SlotNumber, StringFormat='Configurando SLOT {0}'}" FontSize="14" HorizontalAlignment="Center" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,30"/>
+
+                <TextBox materialDesign:HintAssist.Hint="Nombre Completo" Text="{Binding ProfileName}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,0,0,20" FontSize="16"/>
+
+                <DatePicker materialDesign:HintAssist.Hint="Fecha de Nacimiento" SelectedDate="{Binding BirthDate}" Style="{StaticResource MaterialDesignFloatingHintDatePicker}" Margin="0,0,0,20" FontSize="16"/>
+
+                <TextBox materialDesign:HintAssist.Hint="Contraseña de acceso (Opcional)" Text="{Binding Password}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,0,0,20" FontSize="16"/>
+
+                <TextBox materialDesign:HintAssist.Hint="Confirmar Contraseña" Text="{Binding ConfirmPassword}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,0,0,30" FontSize="16"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
+                    <Button Content="CANCELAR" Command="{Binding CancelCommand}" Style="{StaticResource SecondaryActionButton}" Width="150" MinHeight="48" Margin="0,0,20,0"/>
+                    <Button Content="CREAR PERFIL" Command="{Binding SaveProfileCommand}" Style="{StaticResource PrimaryActionButton}" Width="150" MinHeight="48"/>
+                </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</UserControl>

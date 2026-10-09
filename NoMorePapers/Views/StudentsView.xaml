@@ -1,0 +1,136 @@
+<UserControl x:Class="NoMorePapers.Views.StudentsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="#F0E6FF"
+             FontFamily="Segoe UI">
+
+    <UserControl.Resources>
+        <Style x:Key="CenteredDataGridHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="CenteredDataGridCellStyle" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="StudentToolbarButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignIconButton}">
+            <Setter Property="Width" Value="42" />
+            <Setter Property="Height" Value="42" />
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="Margin" Value="2,0" />
+            <Setter Property="Foreground" Value="#24133F" />
+        </Style>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#D8C4F2" />
+            <Setter Property="Foreground" Value="#24133F" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Padding" Value="8,10" />
+        </Style>
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background" Value="#FBF9FF" />
+            <Setter Property="BorderBrush" Value="#8D6BB8" />
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
+            <Setter Property="MinHeight" Value="52" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#E4D5F8" />
+                    <Setter Property="Foreground" Value="#24133F" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="28">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,22">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <materialDesign:PackIcon Kind="AccountGroup" Width="48" Height="48" Foreground="#24133F" VerticalAlignment="Center" />
+                <TextBlock Text="ESTUDIANTES" FontSize="28" FontWeight="ExtraBold" Foreground="#24133F" VerticalAlignment="Center" Margin="14,0,0,0" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <Button Command="{Binding BackToWorkspaceCommand}" Style="{StaticResource StudentToolbarButtonStyle}" ToolTip="Volver a casos">
+                    <materialDesign:PackIcon Kind="ArrowLeft" Width="25" Height="25" />
+                </Button>
+                <Button Command="{Binding ReloadStudentsCommand}" Style="{StaticResource StudentToolbarButtonStyle}" ToolTip="Actualizar estudiantes">
+                    <materialDesign:PackIcon Kind="Refresh" Width="25" Height="25" />
+                </Button>
+                <Button Command="{Binding OpenStudentProfileCommand}" IsEnabled="{Binding HasSelectedStudent}" Style="{StaticResource StudentToolbarButtonStyle}" ToolTip="Editar estudiante">
+                    <materialDesign:PackIcon Kind="SquareEditOutline" Width="25" Height="25" />
+                </Button>
+                <Button Command="{Binding DeleteSelectedStudentsCommand}" IsEnabled="{Binding HasSelectedStudents}" Style="{StaticResource StudentToolbarButtonStyle}" ToolTip="Eliminar estudiante">
+                    <materialDesign:PackIcon Kind="Delete" Width="25" Height="25" />
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Listado de estudiantes" FontSize="18" FontWeight="SemiBold" Foreground="#24133F" VerticalAlignment="Center" />
+            <TextBox Grid.Column="1" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     materialDesign:HintAssist.Hint="Buscar estudiante, edad o grado"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Width="300" Background="#FBF9FF" Foreground="#24133F" />
+        </Grid>
+
+        <Border Grid.Row="2" Background="#FBF9FF" BorderBrush="#8D6BB8" BorderThickness="1" CornerRadius="12" Padding="1">
+            <DataGrid ItemsSource="{Binding Students}"
+                      SelectedItem="{Binding SelectedStudent, Mode=TwoWay}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      IsReadOnly="False"
+                      HeadersVisibility="Column"
+                      GridLinesVisibility="Horizontal"
+                      HorizontalGridLinesBrush="#8D6BB8"
+                      Background="#FBF9FF"
+                      BorderThickness="0"
+                      RowHeaderWidth="0"
+                      SelectionMode="Single"
+                      MouseDoubleClick="StudentsDataGrid_MouseDoubleClick">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Width="58" Header="" IsReadOnly="False">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="NOMBRE" Binding="{Binding Name}" Width="*" IsReadOnly="True" />
+                    <DataGridTextColumn Header="EDAD" Binding="{Binding CurrentAge}" Width="100" IsReadOnly="True"
+                                        HeaderStyle="{StaticResource CenteredDataGridHeaderStyle}"
+                                        ElementStyle="{StaticResource CenteredDataGridCellStyle}" />
+                    <DataGridTemplateColumn Header="GRADO" Width="160" IsReadOnly="True"
+                                            HeaderStyle="{StaticResource CenteredDataGridHeaderStyle}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center">
+                                    <Run Text="{Binding Grade}" />
+                                    <Run Text="-" />
+                                    <Run Text="{Binding Group}" />
+                                    <Run Text="°" />
+                                </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</UserControl>

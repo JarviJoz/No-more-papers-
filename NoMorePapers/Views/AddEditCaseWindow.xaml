@@ -1,0 +1,526 @@
+﻿<Window x:Class="NoMorePapers.Views.AddEditCaseWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Gestión de casos" Height="920" Width="1440" MinHeight="700" MinWidth="1080"
+        WindowStartupLocation="CenterScreen" Background="{DynamicResource AppBackgroundBrush}" FontFamily="Segoe UI">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+        <Style x:Key="CaseCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Padding" Value="18" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="12" ShadowDepth="2" Opacity="0.045" Color="#173A63" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="FieldLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+            <Setter Property="Margin" Value="0,0,0,6" />
+        </Style>
+
+        <Style x:Key="CaseTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="11,8" />
+            <Setter Property="Height" Value="42" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="14" />
+            <Style.Triggers>
+                <Trigger Property="IsKeyboardFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}" />
+                    <Setter Property="BorderThickness" Value="1.5" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="CaseComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="9,5" />
+            <Setter Property="Height" Value="42" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+
+        <Style x:Key="SidebarNavigationButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="#F3F4F6" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Height" Value="46" />
+            <Setter Property="Padding" Value="13,8" />
+            <Setter Property="Margin" Value="0,3" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Stretch" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource SidebarHoverBrush}" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource SidebarSelectedBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.45" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Tag" Value="Active">
+                    <Setter Property="Background" Value="{DynamicResource PrimaryBrush}" />
+                    <Setter Property="Foreground" Value="{DynamicResource PrimaryForegroundBrush}" />
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.22" Color="#0C2350" />
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="CaseTabButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="#6B7C93" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0,0,0,3" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="Padding" Value="14,8" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Style.Triggers>
+                <Trigger Property="Tag" Value="Active">
+                    <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}" />
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="CaseAccentButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+            <Setter Property="Background" Value="{DynamicResource PrimaryBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryForegroundBrush}" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource PrimaryHoverBrush}" />
+                    <Setter Property="Foreground" Value="{DynamicResource PrimaryHoverForegroundBrush}" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource PrimaryPressedBrush}" />
+                </Trigger>
+                <Trigger Property="IsKeyboardFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="{DynamicResource PrimaryPressedBrush}" />
+                    <Setter Property="BorderThickness" Value="2" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="FollowUpButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource SurfaceMutedBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="12,6" />
+            <Setter Property="Height" Value="46" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource SidebarHoverBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource SidebarSelectedBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsOpen}" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource SidebarSelectedBrush}" />
+                    <Setter Property="Foreground" Value="White" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="AvatarEditButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="36" />
+            <Setter Property="Height" Value="36" />
+            <Setter Property="Padding" Value="2" />
+                    <Setter Property="Background" Value="{DynamicResource PrimaryBrush}" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="BorderBrush" Value="White" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+
+        <Style x:Key="FollowUpEditorPanelStyle" TargetType="Border">
+            <Setter Property="Opacity" Value="0" />
+            <Setter Property="MaxHeight" Value="0" />
+            <Setter Property="ClipToBounds" Value="True" />
+            <Setter Property="Background" Value="#F4F8FD" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsFollowUpOpen}" Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2" />
+                                <DoubleAnimation Storyboard.TargetProperty="MaxHeight" To="520" Duration="0:0:0.25" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.15" />
+                                <DoubleAnimation Storyboard.TargetProperty="MaxHeight" To="0" Duration="0:0:0.2" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="52" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="{DynamicResource SidebarBrush}">
+            <Grid Margin="20,0">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <materialDesign:PackIcon Kind="FolderEditOutline" Width="22" Height="22" Foreground="White" VerticalAlignment="Center" />
+                    <TextBlock Text="Gestión de casos" Margin="10,0,0,0" Foreground="White" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding FormTitle}" Foreground="#DCE7F5" FontSize="12" VerticalAlignment="Center" Margin="0,0,12,0" />
+                    <Button Command="{Binding CancelCommand}" Width="34" Height="34" Padding="0" Background="Transparent" BorderThickness="0" ToolTip="Volver" Cursor="Hand">
+                        <materialDesign:PackIcon Kind="ArrowUDownLeftBold" Width="19" Height="19" Foreground="White" />
+                    </Button>
+                    <Button Width="34" Height="34" Padding="0" Margin="4,0,0,0" Background="Transparent" BorderThickness="0" ToolTip="Eliminar caso" Cursor="Hand">
+                        <materialDesign:PackIcon Kind="TrashCanOutline" Width="19" Height="19" Foreground="#F5D7D9" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="190" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Background="{DynamicResource SidebarBrush}" Padding="14,20">
+                <DockPanel LastChildFill="True">
+                    <StackPanel DockPanel.Dock="Top">
+                        <TextBlock Text="CASO" Foreground="#D1D5DB" FontSize="10" FontWeight="Bold" Margin="10,0,0,12" />
+                        <Button x:Name="EditCaseNavigationButton" Tag="Active" Style="{StaticResource SidebarNavigationButtonStyle}" Click="EditCaseNavigation_Click" ToolTip="Editar la información del caso">
+                            <StackPanel Orientation="Horizontal"><materialDesign:PackIcon Kind="SquareEditOutline" Width="19" Height="19" Margin="0,0,12,0" /><TextBlock Text="Editar Caso" VerticalAlignment="Center" /></StackPanel>
+                        </Button>
+                        <Button x:Name="FollowUpsNavigationButton" Style="{StaticResource SidebarNavigationButtonStyle}" Click="FollowUpsNavigation_Click" ToolTip="Ir a los seguimientos">
+                            <StackPanel Orientation="Horizontal"><materialDesign:PackIcon Kind="FormatListChecks" Width="19" Height="19" Margin="0,0,12,0" /><TextBlock Text="Seguimientos" VerticalAlignment="Center" /></StackPanel>
+                        </Button>
+                        <Button x:Name="ObservationsNavigationButton" Style="{StaticResource SidebarNavigationButtonStyle}" Click="ObservationsNavigation_Click" ToolTip="Ir a observaciones">
+                            <StackPanel Orientation="Horizontal"><materialDesign:PackIcon Kind="CommentTextOutline" Width="19" Height="19" Margin="0,0,12,0" /><TextBlock Text="Observaciones" VerticalAlignment="Center" /></StackPanel>
+                        </Button>
+                        <Button IsEnabled="False" Style="{StaticResource SidebarNavigationButtonStyle}" ToolTip="El historial no está disponible en esta ventana">
+                            <StackPanel Orientation="Horizontal"><materialDesign:PackIcon Kind="History" Width="19" Height="19" Margin="0,0,12,0" /><TextBlock Text="Historial" VerticalAlignment="Center" /></StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <Button DockPanel.Dock="Bottom" IsEnabled="False" Style="{StaticResource SidebarNavigationButtonStyle}" ToolTip="La configuración se administra desde la ventana principal">
+                        <StackPanel Orientation="Horizontal"><materialDesign:PackIcon Kind="CogOutline" Width="19" Height="19" Margin="0,0,12,0" /><TextBlock Text="Configuración" VerticalAlignment="Center" /></StackPanel>
+                    </Button>
+                </DockPanel>
+            </Border>
+
+            <ScrollViewer x:Name="CaseScrollViewer" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" CanContentScroll="False">
+                <StackPanel Margin="26,22,26,28">
+                    <Grid Margin="0,0,0,18">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                        <Border Width="66" Height="66" CornerRadius="13" Background="{DynamicResource PrimaryBrush}" VerticalAlignment="Center">
+                            <materialDesign:PackIcon Kind="SquareEditOutline" Width="34" Height="34" Foreground="{DynamicResource PrimaryForegroundBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <StackPanel Grid.Column="1" Margin="16,0,12,0" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding FormTitle}" FontSize="31" FontWeight="Bold" Foreground="#173A63" />
+                            <TextBlock Text="Consulta y actualiza la información del caso." FontSize="14" Foreground="#6B7C93" Margin="0,3,0,0" />
+                        </StackPanel>
+                        <Border Grid.Column="2" Background="#E7F7EF" CornerRadius="18" Padding="13,8" VerticalAlignment="Top" ToolTip="{Binding AgingTooltip}">
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Width="8" Height="8" Fill="{Binding AgingBrush}" VerticalAlignment="Center" Margin="0,0,7,0" />
+                                <TextBlock Text="{Binding SelectedStatus}" Foreground="#17734F" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Border Style="{StaticResource CaseCardStyle}" Padding="16" Margin="0,0,0,18">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.55*" /><ColumnDefinition Width="2.1*" /><ColumnDefinition Width="0.8*" /><ColumnDefinition Width="1.25*" /><ColumnDefinition Width="1.45*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="3,0,12,0">
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,7"><materialDesign:PackIcon Kind="CalendarMonthOutline" Width="17" Height="17" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,7,0" /><TextBlock Text="Fecha de creación del caso" Style="{StaticResource FieldLabelStyle}" Margin="0" VerticalAlignment="Center" /></StackPanel>
+                                <TextBox Text="{Binding CreatedAtString, Mode=OneWay}" IsReadOnly="True" Focusable="False" Style="{StaticResource CaseTextBoxStyle}" Background="#F2F6FC" />
+                            </StackPanel>
+                            <Border Grid.Column="1" BorderBrush="#E3EAF4" BorderThickness="1,0,0,0" Padding="16,0,12,0">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,7"><materialDesign:PackIcon Kind="AccountOutline" Width="17" Height="17" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,7,0" /><TextBlock Text="Nombre del estudiante" Style="{StaticResource FieldLabelStyle}" Margin="0" VerticalAlignment="Center" /></StackPanel>
+                                    <TextBox Text="{Binding StudentName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CaseTextBoxStyle}" />
+                                </StackPanel>
+                            </Border>
+                            <Border Grid.Column="2" BorderBrush="#E3EAF4" BorderThickness="1,0,0,0" Padding="14,0">
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Edad" Style="{StaticResource FieldLabelStyle}" />
+                                    <Border Background="#F2F6FC" CornerRadius="7" Padding="10,9"><TextBlock Text="{Binding Age}" Foreground="#173A63" FontSize="14" FontWeight="SemiBold" HorizontalAlignment="Center" /></Border>
+                                </StackPanel>
+                            </Border>
+                            <Border Grid.Column="3" BorderBrush="#E3EAF4" BorderThickness="1,0,0,0" Padding="14,0">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,7"><materialDesign:PackIcon Kind="SchoolOutline" Width="17" Height="17" Foreground="#22A06B" Margin="0,0,7,0" /><TextBlock Text="Grado · grupo" Style="{StaticResource FieldLabelStyle}" Margin="0" VerticalAlignment="Center" /></StackPanel>
+                                    <Border Background="#DDF4EE" CornerRadius="7" Height="42" Padding="5,0">
+                                        <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                                            <TextBox Grid.Column="0" Text="{Binding Grade, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" BorderThickness="0" Padding="4,5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="#176B51" FontWeight="SemiBold" />
+                                            <TextBlock Grid.Column="1" Text="-" Foreground="#176B51" VerticalAlignment="Center" />
+                                            <TextBox Grid.Column="2" Text="{Binding Group, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" BorderThickness="0" Padding="4,5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="#176B51" FontWeight="SemiBold" />
+                                        </Grid>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+                            <Border Grid.Column="4" BorderBrush="#E3EAF4" BorderThickness="1,0,0,0" Padding="14,0,0,0">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,7"><materialDesign:PackIcon Kind="AccountGroupOutline" Width="17" Height="17" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,7,0" /><TextBlock Text="Jornada" Style="{StaticResource FieldLabelStyle}" Margin="0" VerticalAlignment="Center" /></StackPanel>
+                                    <ComboBox ItemsSource="{Binding ShiftOptions}" SelectedItem="{Binding Shift, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CaseComboBoxStyle}" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="250" /><ColumnDefinition Width="18" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <Border Style="{StaticResource CaseCardStyle}" Padding="18" Margin="0,0,0,16">
+                                <StackPanel>
+                                    <TextBlock Text="Fotografía del estudiante" FontSize="15" FontWeight="Bold" Foreground="#173A63" Margin="0,0,0,14" />
+                                    <Grid Width="112" Height="112" HorizontalAlignment="Center" Margin="0,0,0,12">
+                                        <Border Background="#EAF1FB" CornerRadius="56" ClipToBounds="True">
+                                            <materialDesign:PackIcon x:Name="DefaultAvatarIcon" Kind="Account" Width="78" Height="78" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#8799B0" />
+                                        </Border>
+                                        <Image x:Name="StudentPhoto" Width="112" Height="112" Stretch="UniformToFill" Visibility="Collapsed">
+                                            <Image.Clip><EllipseGeometry Center="56,56" RadiusX="56" RadiusY="56" /></Image.Clip>
+                                        </Image>
+                                        <Button x:Name="AvatarEditButton" Click="AvatarEditButton_Click" Style="{StaticResource AvatarEditButtonStyle}" ToolTip="Cambiar fotografía" HorizontalAlignment="Right" VerticalAlignment="Bottom" Panel.ZIndex="1">
+                                            <materialDesign:PackIcon Kind="CameraOutline" Width="18" Height="18" Foreground="White" />
+                                        </Button>
+                                        <Button x:Name="RemoveAvatarButton" Click="RemoveAvatar_Click" Visibility="Collapsed" Width="28" Height="28" Padding="0" Background="White" BorderThickness="0" ToolTip="Quitar fotografía" HorizontalAlignment="Left" VerticalAlignment="Top" Panel.ZIndex="1">
+                                            <materialDesign:PackIcon Kind="CloseCircle" Width="20" Height="20" Foreground="#C62828" />
+                                        </Button>
+                                        <Popup x:Name="AvatarMenu" PlacementTarget="{Binding ElementName=AvatarEditButton}" Placement="Bottom" StaysOpen="True" AllowsTransparency="True">
+                                            <Border Background="White" BorderBrush="#D9E2EF" BorderThickness="1" CornerRadius="9" Padding="12" Width="240">
+                                                <StackPanel>
+                                                    <TextBlock Text="Seleccionar imagen" FontWeight="Bold" Foreground="#173A63" Margin="0,0,0,8" />
+                                                    <Button Click="AvatarMale_Click" Background="Transparent" BorderThickness="0" Padding="7" HorizontalContentAlignment="Stretch"><StackPanel Orientation="Horizontal"><materialDesign:PackIcon Kind="Account" Width="28" Height="28" Foreground="#6BA47A" Margin="0,0,8,0" /><TextBlock Text="Avatar masculino" VerticalAlignment="Center" /></StackPanel></Button>
+                                                    <Button Click="AvatarFemale_Click" Background="Transparent" BorderThickness="0" Padding="7" HorizontalContentAlignment="Stretch"><StackPanel Orientation="Horizontal"><materialDesign:PackIcon Kind="AccountOutline" Width="28" Height="28" Foreground="#ED8AB4" Margin="0,0,8,0" /><TextBlock Text="Avatar femenino" VerticalAlignment="Center" /></StackPanel></Button>
+                                                    <Button Click="SelectAvatarFromDevice_Click" Background="Transparent" BorderThickness="0" Padding="7" HorizontalContentAlignment="Stretch"><StackPanel Orientation="Horizontal"><materialDesign:PackIcon Kind="FolderImage" Width="28" Height="28" Foreground="#607D8B" Margin="0,0,8,0" /><TextBlock Text="Seleccionar desde el dispositivo" TextWrapping="Wrap" VerticalAlignment="Center" /></StackPanel></Button>
+                                                    <Button Click="ApplyAvatar_Click" Content="Aplicar" Background="{DynamicResource PrimaryBrush}" Foreground="{DynamicResource PrimaryForegroundBrush}" BorderThickness="0" Height="34" Margin="0,9,0,0" />
+                                                    <Button Click="CancelAvatar_Click" Content="Cancelar" Background="White" Foreground="#455A64" BorderBrush="#D9E2EF" BorderThickness="1" Height="34" Margin="0,6,0,0" />
+                                                </StackPanel>
+                                            </Border>
+                                        </Popup>
+                                    </Grid>
+                                    <Button Click="AvatarEditButton_Click" Content="Cambiar foto" Style="{StaticResource SecondaryActionButton}" Height="38" HorizontalAlignment="Center">
+                                        <Button.ContentTemplate><DataTemplate><StackPanel Orientation="Horizontal"><materialDesign:PackIcon Kind="CameraOutline" Width="17" Height="17" Margin="0,0,7,0" /><TextBlock Text="Cambiar foto" VerticalAlignment="Center" /></StackPanel></DataTemplate></Button.ContentTemplate>
+                                    </Button>
+                                </StackPanel>
+                            </Border>
+
+                            <Border x:Name="ObservationsCard" Style="{StaticResource CaseCardStyle}" Padding="16">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12"><materialDesign:PackIcon Kind="CommentTextOutline" Width="20" Height="20" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,8,0" /><TextBlock Text="Observaciones" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center" /></StackPanel>
+                                    <Grid>
+                                        <TextBox x:Name="ObservationsTextBox" Text="{Binding Observations, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="Wrap" Height="150" VerticalContentAlignment="Top" Style="{StaticResource CaseTextBoxStyle}" Padding="12" />
+                                        <TextBlock Text="Aquí puedes añadir observaciones del caso..." Margin="13,11,10,0" Foreground="#93A2B8" FontSize="13" IsHitTestVisible="False" VerticalAlignment="Top">
+                                            <TextBlock.Style><Style TargetType="TextBlock"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers><DataTrigger Binding="{Binding Text, ElementName=ObservationsTextBox}" Value=""><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+                                        </TextBlock>
+                                    </Grid>
+                                    <Border Background="#F2F6FC" CornerRadius="8" Padding="10" Margin="0,14,0,0">
+                                        <StackPanel><StackPanel Orientation="Horizontal"><materialDesign:PackIcon Kind="ClockOutline" Width="16" Height="16" Foreground="#526B8A" Margin="0,0,7,0" /><TextBlock Text="Última modificación del caso" FontSize="11" FontWeight="SemiBold" Foreground="#6B7C93" VerticalAlignment="Center" /></StackPanel><TextBlock Text="{Binding UpdatedAtString}" FontSize="13" FontWeight="SemiBold" Foreground="#173A63" Margin="23,5,0,0" /></StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+
+                        <Border Grid.Column="2" Style="{StaticResource CaseCardStyle}" Padding="20">
+                            <StackPanel>
+                                <Border BorderBrush="#E3EAF4" BorderThickness="0,0,0,1" Margin="0,0,0,15">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button x:Name="InfoTabButton" Tag="Active" Style="{StaticResource CaseTabButtonStyle}" Click="InfoTab_Click">
+                                            <StackPanel Orientation="Horizontal"><materialDesign:PackIcon Kind="CardAccountDetailsOutline" Width="17" Height="17" Margin="0,0,8,0" /><TextBlock Text="Información del caso" VerticalAlignment="Center" /></StackPanel>
+                                        </Button>
+                                        <Button x:Name="FollowUpsTabButton" Style="{StaticResource CaseTabButtonStyle}" Click="FollowUpsTab_Click">
+                                            <StackPanel Orientation="Horizontal"><materialDesign:PackIcon Kind="FormatListChecks" Width="17" Height="17" Margin="0,0,8,0" /><TextBlock Text="Seguimientos (4)" VerticalAlignment="Center" /></StackPanel>
+                                        </Button>
+                                    </StackPanel>
+                                </Border>
+
+                                <StackPanel x:Name="CaseInformationPanel">
+                                    <StackPanel Margin="0,0,0,14">
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,6"><materialDesign:PackIcon Kind="CalendarMonthOutline" Width="17" Height="17" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,7,0" /><TextBlock Text="Fecha de nacimiento" Style="{StaticResource FieldLabelStyle}" Margin="0" VerticalAlignment="Center" /></StackPanel>
+                                        <DatePicker SelectedDate="{Binding BirthDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="42" FontSize="14" />
+                                    </StackPanel>
+
+                                    <Grid Margin="0,0,0,14">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="1.2*" /><ColumnDefinition Width="1.1*" /><ColumnDefinition Width="1.7*" /></Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                                            <TextBlock Text="Nombre del acudiente (opcional)" Style="{StaticResource FieldLabelStyle}" />
+                                            <TextBox Text="{Binding GuardianName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CaseTextBoxStyle}" ToolTip="Nombre del acudiente" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" Margin="0,0,12,0">
+                                            <TextBlock Text="Número de teléfono (opcional)" Style="{StaticResource FieldLabelStyle}" />
+                                            <TextBox Text="{Binding GuardianPhone, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CaseTextBoxStyle}" ToolTip="Número de teléfono" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2">
+                                            <TextBlock Text="Parentesco (acudiente)" Style="{StaticResource FieldLabelStyle}" />
+                                            <WrapPanel VerticalAlignment="Center" Margin="0,8,0,0">
+                                                <CheckBox Content="Padre" IsChecked="{Binding IsPadre}" Margin="0,0,12,8" Foreground="#243B5A" />
+                                                <CheckBox Content="Madre" IsChecked="{Binding IsMadre}" Margin="0,0,12,8" Foreground="#243B5A" />
+                                                <CheckBox Content="Otro" IsChecked="{Binding IsOtro}" Margin="0,0,0,8" Foreground="#243B5A" />
+                                            </WrapPanel>
+                                            <TextBox Text="{Binding ParentescoOtroText, UpdateSourceTrigger=PropertyChanged}" ToolTip="Especificar parentesco" Margin="0,3,0,0">
+                                                <TextBox.Style><Style TargetType="TextBox" BasedOn="{StaticResource CaseTextBoxStyle}"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers><DataTrigger Binding="{Binding IsOtro}" Value="True"><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style></TextBox.Style>
+                                            </TextBox>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <StackPanel Margin="0,0,0,12">
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,9"><materialDesign:PackIcon Kind="Target" Width="18" Height="18" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,8,0" /><TextBlock Text="Motivo de remisión" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center" /></StackPanel>
+                                        <WrapPanel>
+                                            <CheckBox Content="Emocional" IsChecked="{Binding IsEmocional}" Margin="0,0,20,9" Foreground="#243B5A" MinWidth="92" />
+                                            <CheckBox Content="Familiar" IsChecked="{Binding IsFamiliar}" Margin="0,0,20,9" Foreground="#243B5A" MinWidth="82" />
+                                            <CheckBox Content="Académico" IsChecked="{Binding IsAcademico}" Margin="0,0,20,9" Foreground="#243B5A" MinWidth="92" />
+                                            <CheckBox Content="Psicológico" IsChecked="{Binding IsPsicologico}" Margin="0,0,20,9" Foreground="#243B5A" MinWidth="96" />
+                                            <CheckBox Content="Físico" IsChecked="{Binding IsFisico}" Margin="0,0,20,9" Foreground="#243B5A" MinWidth="72" />
+                                            <CheckBox Content="Conductual" IsChecked="{Binding IsConductual}" Margin="0,0,20,9" Foreground="#243B5A" MinWidth="96" />
+                                        </WrapPanel>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <StackPanel x:Name="FollowUpSection" Margin="0,0,0,12">
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,9"><materialDesign:PackIcon Kind="FormatListChecks" Width="18" Height="18" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,8,0" /><TextBlock Text="Seguimientos" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center" /></StackPanel>
+                                    <StackPanel x:Name="FollowUpLayoutPanel">
+                                        <Button DataContext="{Binding FollowUps[0]}" Style="{StaticResource FollowUpButtonStyle}" Command="{Binding DataContext.OpenFollowUpCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" CommandParameter="{Binding Number}" Margin="0,0,0,7">
+                                            <Grid><StackPanel Orientation="Horizontal"><materialDesign:PackIcon Width="18" Height="18" Margin="0,0,8,0"><materialDesign:PackIcon.Style><Style TargetType="materialDesign:PackIcon"><Setter Property="Kind" Value="ChevronRight" /><Style.Triggers><DataTrigger Binding="{Binding IsOpen}" Value="True"><Setter Property="Kind" Value="ChevronDown" /></DataTrigger></Style.Triggers></Style></materialDesign:PackIcon.Style></materialDesign:PackIcon><TextBlock Text="Seguimiento #1" /><TextBlock Text="  •" Foreground="#22A06B" Visibility="{Binding HasSavedContent, Converter={StaticResource BooleanToVisibilityConverter}}" /></StackPanel><materialDesign:PackIcon Kind="NoteEditOutline" HorizontalAlignment="Right" VerticalAlignment="Center" /></Grid>
+                                        </Button>
+                                        <Button DataContext="{Binding FollowUps[1]}" Style="{StaticResource FollowUpButtonStyle}" Command="{Binding DataContext.OpenFollowUpCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" CommandParameter="{Binding Number}" Margin="0,0,0,7">
+                                            <Grid><StackPanel Orientation="Horizontal"><materialDesign:PackIcon Width="18" Height="18" Margin="0,0,8,0"><materialDesign:PackIcon.Style><Style TargetType="materialDesign:PackIcon"><Setter Property="Kind" Value="ChevronRight" /><Style.Triggers><DataTrigger Binding="{Binding IsOpen}" Value="True"><Setter Property="Kind" Value="ChevronDown" /></DataTrigger></Style.Triggers></Style></materialDesign:PackIcon.Style></materialDesign:PackIcon><TextBlock Text="Seguimiento #2" /><TextBlock Text="  •" Foreground="#22A06B" Visibility="{Binding HasSavedContent, Converter={StaticResource BooleanToVisibilityConverter}}" /></StackPanel><materialDesign:PackIcon Kind="NoteEditOutline" HorizontalAlignment="Right" VerticalAlignment="Center" /></Grid>
+                                        </Button>
+                                        <Button DataContext="{Binding FollowUps[2]}" Style="{StaticResource FollowUpButtonStyle}" Command="{Binding DataContext.OpenFollowUpCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" CommandParameter="{Binding Number}" Margin="0,0,0,7">
+                                            <Grid><StackPanel Orientation="Horizontal"><materialDesign:PackIcon Width="18" Height="18" Margin="0,0,8,0"><materialDesign:PackIcon.Style><Style TargetType="materialDesign:PackIcon"><Setter Property="Kind" Value="ChevronRight" /><Style.Triggers><DataTrigger Binding="{Binding IsOpen}" Value="True"><Setter Property="Kind" Value="ChevronDown" /></DataTrigger></Style.Triggers></Style></materialDesign:PackIcon.Style></materialDesign:PackIcon><TextBlock Text="Seguimiento #3" /><TextBlock Text="  •" Foreground="#22A06B" Visibility="{Binding HasSavedContent, Converter={StaticResource BooleanToVisibilityConverter}}" /></StackPanel><materialDesign:PackIcon Kind="NoteEditOutline" HorizontalAlignment="Right" VerticalAlignment="Center" /></Grid>
+                                        </Button>
+                                        <Button DataContext="{Binding FollowUps[3]}" Style="{StaticResource FollowUpButtonStyle}" Command="{Binding DataContext.OpenFollowUpCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" CommandParameter="{Binding Number}" Margin="0,0,0,7">
+                                            <Grid><StackPanel Orientation="Horizontal"><materialDesign:PackIcon Width="18" Height="18" Margin="0,0,8,0"><materialDesign:PackIcon.Style><Style TargetType="materialDesign:PackIcon"><Setter Property="Kind" Value="ChevronRight" /><Style.Triggers><DataTrigger Binding="{Binding IsOpen}" Value="True"><Setter Property="Kind" Value="ChevronDown" /></DataTrigger></Style.Triggers></Style></materialDesign:PackIcon.Style></materialDesign:PackIcon><TextBlock Text="Seguimiento #4" /><TextBlock Text="  •" Foreground="#22A06B" Visibility="{Binding HasSavedContent, Converter={StaticResource BooleanToVisibilityConverter}}" /></StackPanel><materialDesign:PackIcon Kind="NoteEditOutline" HorizontalAlignment="Right" VerticalAlignment="Center" /></Grid>
+                                        </Button>
+
+                                        <Border x:Name="FollowUpEditorPanel" Style="{StaticResource FollowUpEditorPanelStyle}" Padding="12" Margin="0,4,0,12">
+                                            <StackPanel>
+                                                <DockPanel Margin="0,0,0,9">
+                                                    <Button DockPanel.Dock="Right" Command="{Binding CloseFollowUpCommand}" Style="{StaticResource MaterialDesignToolButton}" Padding="4" ToolTip="Cerrar seguimiento"><materialDesign:PackIcon Kind="Close" Width="20" Height="20" /></Button>
+                                                    <TextBlock Text="{Binding ActiveFollowUp.Title}" FontWeight="Bold" FontSize="15" Foreground="#173A63" VerticalAlignment="Center" />
+                                                </DockPanel>
+                                                <Border Background="#173A63" CornerRadius="6,6,0,0" Height="36">
+                                                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Button Click="Bold_Click" ToolTip="Negrita"><materialDesign:PackIcon Kind="FormatBold" /></Button>
+                                                            <Button Click="Italic_Click" ToolTip="Cursiva"><materialDesign:PackIcon Kind="FormatItalic" /></Button>
+                                                            <Button Click="Underline_Click" ToolTip="Subrayado"><materialDesign:PackIcon Kind="FormatUnderline" /></Button>
+                                                            <Button Click="StrikeThrough_Click" ToolTip="Tachado"><materialDesign:PackIcon Kind="FormatStrikethrough" /></Button>
+                                                            <Button Click="Highlight_Click" ToolTip="Resaltador"><materialDesign:PackIcon Kind="FormatColorFill" Foreground="Yellow" /></Button>
+                                                            <Button ToolTip="Color del texto"><materialDesign:PackIcon Kind="FormatColorText" /><Button.ContextMenu><ContextMenu><MenuItem Header="Negro" Tag="Black" Click="TextColor_Click" /><MenuItem Header="Rojo" Tag="Red" Click="TextColor_Click" /><MenuItem Header="Azul" Tag="Blue" Click="TextColor_Click" /><MenuItem Header="Verde" Tag="Green" Click="TextColor_Click" /></ContextMenu></Button.ContextMenu></Button>
+                                                            <Button Click="Bullets_Click" ToolTip="Lista con viñetas"><materialDesign:PackIcon Kind="FormatListBulleted" /></Button>
+                                                            <Button Click="Numbering_Click" ToolTip="Lista numerada"><materialDesign:PackIcon Kind="FormatListNumbered" /></Button>
+                                                            <Button Click="AlignLeft_Click" ToolTip="Alinear a la izquierda"><materialDesign:PackIcon Kind="FormatAlignLeft" /></Button>
+                                                            <Button Click="AlignCenter_Click" ToolTip="Centrar"><materialDesign:PackIcon Kind="FormatAlignCenter" /></Button>
+                                                            <Button Click="AlignRight_Click" ToolTip="Alinear a la derecha"><materialDesign:PackIcon Kind="FormatAlignRight" /></Button>
+                                                            <Button Click="AlignJustify_Click" ToolTip="Justificar"><materialDesign:PackIcon Kind="FormatAlignJustify" /></Button>
+                                                            <Button Click="Link_Click" ToolTip="Enlace"><materialDesign:PackIcon Kind="LinkVariant" /></Button>
+                                                            <Button Click="Undo_Click" ToolTip="Deshacer"><materialDesign:PackIcon Kind="Undo" /></Button>
+                                                            <Button Click="Redo_Click" ToolTip="Rehacer"><materialDesign:PackIcon Kind="Redo" /></Button>
+                                                        </StackPanel>
+                                                    </ScrollViewer>
+                                                </Border>
+                                                <RichTextBox x:Name="FollowUpEditor" Height="150" Background="White" BorderBrush="#D9E2EF" BorderThickness="1" Padding="10" VerticalScrollBarVisibility="Auto" PreviewKeyDown="FollowUpEditor_PreviewKeyDown" PreviewMouseLeftButtonDown="FollowUpEditor_PreviewMouseLeftButtonDown" PreviewMouseWheel="FollowUpEditor_PreviewMouseWheel" />
+                                                <Grid Margin="0,10,0,0">
+                                                    <Grid.ColumnDefinitions><ColumnDefinition Width="1.4*" /><ColumnDefinition Width="1.4*" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                                    <StackPanel Grid.Column="0" Margin="0,0,10,0"><TextBlock Text="Fecha" Style="{StaticResource FieldLabelStyle}" /><DatePicker SelectedDate="{Binding ActiveFollowUp.FollowUpDate, UpdateSourceTrigger=PropertyChanged}" Height="34" /></StackPanel>
+                                                    <StackPanel Grid.Column="1" Margin="0,0,10,0"><TextBlock Text="Firma" Style="{StaticResource FieldLabelStyle}" /><Button Click="Signature_Click" Height="34" Content="Seleccionar imagen" Style="{StaticResource SecondaryActionButton}" /></StackPanel>
+                                                    <Button Grid.Column="2" Content="Guardar seguimiento" Click="SaveFollowUp_Click" Style="{StaticResource CaseAccentButtonStyle}" FontWeight="SemiBold" Height="36" Padding="12,5" Margin="0,18,8,0" VerticalAlignment="Bottom" />
+                                                    <Button Grid.Column="3" Command="{Binding DeleteActiveFollowUpCommand}" Width="38" Height="36" Margin="0,18,0,0" VerticalAlignment="Bottom" ToolTip="Eliminar seguimiento"><materialDesign:PackIcon Kind="TrashCanOutline" Width="19" Height="19" Foreground="#B4232F" /></Button>
+                                                </Grid>
+                                            </StackPanel>
+                                        </Border>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <Border Background="#F2F6FC" CornerRadius="9" Padding="12" Margin="0,2,0,0">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="1.1*" /><ColumnDefinition Width="1.2*" /><ColumnDefinition Width="1.2*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,12,0">
+                                            <materialDesign:PackIcon Kind="BellOutline" Width="18" Height="18" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,7,0" />
+                                            <TextBlock Text="Notificar" FontSize="13" FontWeight="SemiBold" Foreground="#173A63" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                            <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" IsChecked="{Binding IsNotificationEnabled, Mode=TwoWay}" Background="#22A06B" ToolTip="Activar o desactivar notificaciones" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" Margin="10,0,12,0">
+                                            <TextBlock Text="Periodo" Style="{StaticResource FieldLabelStyle}" />
+                                            <ComboBox ItemsSource="{Binding NotificationIntervalOptions}" SelectedItem="{Binding SelectedNotificationInterval, Mode=TwoWay}" Style="{StaticResource CaseComboBoxStyle}" Visibility="{Binding IsNotificationEnabled, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2" Margin="10,0,12,0">
+                                            <TextBlock Text="Estado" Style="{StaticResource FieldLabelStyle}" />
+                                            <ComboBox ItemsSource="{Binding StatusOptions}" SelectedItem="{Binding SelectedStatus, Mode=TwoWay}" Style="{StaticResource CaseComboBoxStyle}" />
+                                        </StackPanel>
+                                        <Button Grid.Column="3" Command="{Binding SaveCommand}" Style="{StaticResource CaseAccentButtonStyle}" Width="150" Height="48" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" ToolTip="Guardar los cambios del caso">
+                                            <StackPanel Orientation="Horizontal"><materialDesign:PackIcon Kind="ContentSaveOutline" Width="20" Height="20" Margin="0,0,9,0" /><TextBlock Text="Guardar" VerticalAlignment="Center" /></StackPanel>
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Window>

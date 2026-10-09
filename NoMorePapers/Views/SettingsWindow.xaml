@@ -1,0 +1,203 @@
+<Window x:Class="NoMorePapers.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Configuración" Width="820" Height="650" MinWidth="560" MinHeight="480"
+        WindowStartupLocation="CenterOwner" WindowStyle="None" AllowsTransparency="True"
+        Background="Transparent" ResizeMode="CanResizeWithGrip" ShowInTaskbar="False"
+        Loaded="Window_Loaded" PreviewKeyDown="Window_PreviewKeyDown" Closing="Window_Closing">
+    <Window.Resources>
+        <Style x:Key="SettingsCard" TargetType="Border" BasedOn="{StaticResource AppCardStyle}">
+            <Setter Property="Padding" Value="18" />
+            <Setter Property="Margin" Value="0,0,0,14" />
+        </Style>
+        <Style x:Key="SettingsSectionTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+            <Setter Property="Margin" Value="0,0,0,5" />
+        </Style>
+        <Style x:Key="SettingsDescription" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="SettingsSlider" TargetType="Slider" BasedOn="{StaticResource MaterialDesignSlider}">
+            <Setter Property="Minimum" Value="0" />
+            <Setter Property="Maximum" Value="100" />
+            <Setter Property="IsSnapToTickEnabled" Value="False" />
+            <Setter Property="SmallChange" Value="1" />
+            <Setter Property="LargeChange" Value="10" />
+            <Setter Property="Margin" Value="0,8,0,0" />
+        </Style>
+    </Window.Resources>
+
+    <Border x:Name="DialogSurface" Background="{DynamicResource SurfaceBrush}" CornerRadius="18" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Padding="24">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="28" ShadowDepth="5" Opacity="0.22" Color="#18294A" />
+        </Border.Effect>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Margin="0,0,0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Border Width="44" Height="44" CornerRadius="13" Background="{DynamicResource SurfaceMutedBrush}">
+                    <materialDesign:PackIcon Kind="CogOutline" Width="24" Height="24" Foreground="{DynamicResource PrimaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <StackPanel Grid.Column="1" Margin="13,0,0,0" VerticalAlignment="Center">
+                    <TextBlock Text="Configuración" FontSize="23" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}" />
+                    <TextBlock Text="Personaliza tu experiencia en No More Papers." FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" />
+                </StackPanel>
+                <Button Grid.Column="2" Width="38" Height="38" Style="{StaticResource MaterialDesignIconButton}" ToolTip="Cerrar configuración" AutomationProperties.Name="Cerrar configuración" Click="Close_Click">
+                    <materialDesign:PackIcon Kind="Close" />
+                </Button>
+            </Grid>
+
+            <TabControl x:Name="SettingsTabs" Grid.Row="1" Grid.RowSpan="2" Margin="0,16,0,0" BorderThickness="0" Background="Transparent" SelectionChanged="SettingsTabs_SelectionChanged">
+                <TabItem Header="Visualización" AutomationProperties.Name="Visualización">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,12,0,4">
+                        <StackPanel>
+                            <Border Style="{StaticResource SettingsCard}">
+                                <StackPanel>
+                                    <TextBlock Text="Tamaño de letra" Style="{StaticResource SettingsSectionTitle}" />
+                                    <TextBlock Text="Ajusta la lectura de la interfaz." Style="{StaticResource SettingsDescription}" />
+                                    <ComboBox x:Name="FontSizeCombo" Margin="0,12,0,0" MinHeight="38" SelectionChanged="FontSizeCombo_SelectionChanged" AutomationProperties.Name="Tamaño de letra">
+                                        <ComboBoxItem Content="Pequeño" />
+                                        <ComboBoxItem Content="Mediano" />
+                                        <ComboBoxItem Content="Grande" />
+                                    </ComboBox>
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource SettingsCard}">
+                                <StackPanel>
+                                    <TextBlock Text="Aspecto" Style="{StaticResource SettingsSectionTitle}" />
+                                    <TextBlock Text="Elige una apariencia clara, oscura o la del sistema." Style="{StaticResource SettingsDescription}" />
+                                    <ComboBox x:Name="AppearanceCombo" Margin="0,12,0,0" MinHeight="38" SelectionChanged="AppearanceCombo_SelectionChanged" AutomationProperties.Name="Aspecto">
+                                        <ComboBoxItem Content="Claro" />
+                                        <ComboBoxItem Content="Oscuro" />
+                                        <ComboBoxItem Content="Seguir configuración del sistema" />
+                                    </ComboBox>
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource SettingsCard}">
+                                <StackPanel>
+                                    <TextBlock Text="Color principal" Style="{StaticResource SettingsSectionTitle}" />
+                                    <TextBlock Text="Selecciona un color para los elementos destacados." Style="{StaticResource SettingsDescription}" />
+                                    <WrapPanel Margin="0,12,0,0">
+                                        <Button Tag="#315BFA" Click="AccentColor_Click" ToolTip="Azul" AutomationProperties.Name="Color azul" Width="34" Height="34" Margin="0,0,10,0" Background="#315BFA" BorderThickness="0" />
+                                        <Button Tag="#0078D4" Click="AccentColor_Click" ToolTip="Azul cielo" AutomationProperties.Name="Color azul cielo" Width="34" Height="34" Margin="0,0,10,0" Background="#0078D4" BorderThickness="0" />
+                                        <Button Tag="#14966D" Click="AccentColor_Click" ToolTip="Verde" AutomationProperties.Name="Color verde" Width="34" Height="34" Margin="0,0,10,0" Background="#14966D" BorderThickness="0" />
+                                        <Button Tag="#8754E8" Click="AccentColor_Click" ToolTip="Violeta" AutomationProperties.Name="Color violeta" Width="34" Height="34" Margin="0,0,10,0" Background="#8754E8" BorderThickness="0" />
+                                        <Button Tag="#E5485B" Click="AccentColor_Click" ToolTip="Coral" AutomationProperties.Name="Color coral" Width="34" Height="34" Margin="0,0,10,0" Background="#E5485B" BorderThickness="0" />
+                                        <Button Tag="#D59000" Click="AccentColor_Click" ToolTip="Ámbar" AutomationProperties.Name="Color ámbar" Width="34" Height="34" Background="#D59000" BorderThickness="0" />
+                                    </WrapPanel>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem Header="Sonido" AutomationProperties.Name="Sonido y notificaciones">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,12,0,4">
+                        <StackPanel>
+                            <Border Style="{StaticResource SettingsCard}">
+                                <DockPanel>
+                                    <StackPanel>
+                                        <TextBlock Text="Sonidos de notificación" Style="{StaticResource SettingsSectionTitle}" />
+                                        <TextBlock Text="Reproduce una alerta al recibir recordatorios." Style="{StaticResource SettingsDescription}" />
+                                    </StackPanel>
+                                    <CheckBox x:Name="SoundsEnabledCheck" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="20,0,0,0" Checked="SoundsEnabledCheck_Changed" Unchecked="SoundsEnabledCheck_Changed" AutomationProperties.Name="Activar sonidos de notificación" />
+                                </DockPanel>
+                            </Border>
+                            <Border Style="{StaticResource SettingsCard}">
+                                <StackPanel>
+                                    <DockPanel>
+                                        <TextBlock Text="Volumen de notificaciones" Style="{StaticResource SettingsSectionTitle}" />
+                                        <TextBlock x:Name="VolumeValue" DockPanel.Dock="Right" Foreground="{DynamicResource PrimaryTextBrush}" FontWeight="Bold" />
+                                    </DockPanel>
+                                    <Slider x:Name="VolumeSlider" Style="{StaticResource SettingsSlider}" ValueChanged="VolumeSlider_ValueChanged" AutomationProperties.Name="Volumen de notificaciones" />
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource SettingsCard}">
+                                <StackPanel>
+                                    <TextBlock Text="Sonido personalizado" Style="{StaticResource SettingsSectionTitle}" />
+                                    <TextBlock Text="Formato WAV · tamaño máximo 5 MB" Style="{StaticResource SettingsDescription}" />
+                                    <TextBlock x:Name="SoundFileName" Margin="0,10,0,10" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <WrapPanel>
+                                        <Button Content="Cargar archivo" Style="{StaticResource SecondaryActionButton}" Click="LoadSound_Click" AutomationProperties.Name="Cargar archivo de sonido" />
+                                        <Button Content="Vista previa" Style="{StaticResource SecondaryActionButton}" Margin="8,4" Click="PreviewSound_Click" AutomationProperties.Name="Reproducir vista previa" />
+                                        <Button Content="Restaurar sonido" Style="{StaticResource SecondaryActionButton}" Margin="8,4" Click="RemoveSound_Click" AutomationProperties.Name="Restaurar sonido predeterminado" />
+                                    </WrapPanel>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem Header="Notificaciones" AutomationProperties.Name="Notificaciones">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,12,0,4">
+                        <StackPanel>
+                            <Border Style="{StaticResource SettingsCard}">
+                                <DockPanel>
+                                    <StackPanel>
+                                        <TextBlock Text="Activar notificaciones" Style="{StaticResource SettingsSectionTitle}" />
+                                        <TextBlock Text="Pausa temporalmente los avisos del espacio de trabajo." Style="{StaticResource SettingsDescription}" />
+                                    </StackPanel>
+                                    <CheckBox x:Name="NotificationsEnabledCheck" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="20,0,0,0" Checked="NotificationsEnabledCheck_Changed" Unchecked="NotificationsEnabledCheck_Changed" AutomationProperties.Name="Activar notificaciones" />
+                                </DockPanel>
+                            </Border>
+                            <Border x:Name="SnoozeCard" Style="{StaticResource SettingsCard}">
+                                <StackPanel>
+                                    <TextBlock Text="Duración de la pausa" Style="{StaticResource SettingsSectionTitle}" />
+                                    <TextBlock Text="Se volverán a activar automáticamente al finalizar." Style="{StaticResource SettingsDescription}" />
+                                    <ComboBox x:Name="SnoozeDurationCombo" Margin="0,12,0,0" MinHeight="38" SelectionChanged="SnoozeDurationCombo_SelectionChanged" AutomationProperties.Name="Duración de las notificaciones desactivadas">
+                                        <ComboBoxItem Content="15 minutos" Tag="15" />
+                                        <ComboBoxItem Content="30 minutos" Tag="30" />
+                                        <ComboBoxItem Content="1 hora" Tag="60" />
+                                        <ComboBoxItem Content="24 horas" Tag="1440" />
+                                    </ComboBox>
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource SettingsCard}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon x:Name="NotificationStatusIcon" Kind="BellCheckOutline" Width="24" Height="24" Foreground="{DynamicResource SuccessBrush}" Margin="0,0,12,0" />
+                                    <TextBlock x:Name="NotificationStatus" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem Header="Zona de peligro" AutomationProperties.Name="Zona de peligro">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,12,0,4">
+                        <Border Background="#FFF3F4" BorderBrush="#F5C3C8" BorderThickness="1" CornerRadius="14" Padding="22" Margin="0,0,0,14">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                    <materialDesign:PackIcon Kind="AlertOctagonOutline" Foreground="{StaticResource DangerBrush}" Width="22" Height="22" Margin="0,0,10,0" />
+                                    <TextBlock Text="Zona de peligro" FontSize="18" FontWeight="Bold" Foreground="#A92537" VerticalAlignment="Center" />
+                                </StackPanel>
+                                <TextBlock Text="Eliminar perfil" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,4,0,6" />
+                                <TextBlock Text="Esta acción eliminará permanentemente tu perfil y los datos asociados. Esta acción no se puede deshacer." TextWrapping="Wrap" Foreground="{StaticResource TextSecondaryBrush}" />
+                                <Button Content="Eliminar mi perfil" Margin="0,18,0,0" HorizontalAlignment="Left" Background="{StaticResource DangerBrush}" Foreground="White" Padding="18,9" BorderThickness="0" Cursor="Hand" Click="DeleteProfile_Click" AutomationProperties.Name="Eliminar mi perfil" />
+                            </StackPanel>
+                        </Border>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+                <Button Content="Restaurar valores predeterminados" Style="{StaticResource SecondaryActionButton}" Margin="0,0,8,0" Click="Reset_Click" />
+                <Button Content="Cancelar" Style="{StaticResource SecondaryActionButton}" Margin="0,0,8,0" Click="Cancel_Click" />
+                <Button Content="Guardar" Style="{StaticResource PrimaryActionButton}" Click="Save_Click" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>
